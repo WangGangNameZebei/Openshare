@@ -112,9 +112,8 @@ static NSString *schema=@"Weibo";
             //auth
             if ([transferObject[@"statusCode"] intValue]==0) {
                 if ([self authSuccessCallback]) {
-                    [self authSuccessCallback](transferObject);
-                    //数据库储存
                     [[NSUserDefaults standardUserDefaults] setObject:transferObject forKey:@"WeiboAuthInfomation"];
+                    [self authSuccessCallback](transferObject);
                 }
             } else {
                 if ([self authFailCallback]) {
