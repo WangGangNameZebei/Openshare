@@ -146,8 +146,7 @@
     [auth addEventHandler:^(id sender) {
         [OpenShare WeiboAuth:@"all" redirectURI:@"http://openshare.gfzj.us/" Success:^(NSDictionary *message) {
             ULog(@"微博登录成功:\n%@",message);
-            
-        [OpenShare getWeiboUserInfoWithCompletion:^(NSDictionary *data, NSError *error) {
+            [OpenShare getWeiboUserInfoWithCompletion:^(NSDictionary *data, NSError *error) {
             NSLog(@"=== %@",data);
         }];
             

@@ -143,8 +143,8 @@ static NSString *schema=@"Weibo";
 + (void)getWeiboUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
     NSDictionary *weiboDictionary =  [[NSUserDefaults standardUserDefaults] objectForKey:@"WeiboAuthInfomation"];
     NSMutableDictionary *param = [[NSMutableDictionary alloc] init];
-     [param setObject:[weiboDictionary objectForKey:@"statusCode"] forKey:@"statusCode"];
-    [param setObject:[weiboDictionary objectForKey:@"userID"] forKey:@"userID"];
+     [param setObject:[weiboDictionary objectForKey:@"accessToken"] forKey:@"access_token"];
+    [param setObject:[weiboDictionary objectForKey:@"userID"] forKey:@"uid"];
     [OpenShare sendGetRequestWithUrl:@"https://api.weibo.com/2/users/show.json" andParam:param withCompletion:completion];
     
 }
