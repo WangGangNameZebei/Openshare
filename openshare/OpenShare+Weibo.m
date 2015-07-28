@@ -113,7 +113,7 @@ static NSString *schema=@"Weibo";
                 if ([self authSuccessCallback]) {
                     [self authSuccessCallback](transferObject);
                 }
-            }else{
+            } else {
                 if ([self authFailCallback]) {
                     NSError *err=[NSError errorWithDomain:@"weibo_auth_response" code:[transferObject[@"statusCode"] intValue] userInfo:transferObject];
                     [self authFailCallback](transferObject,err);

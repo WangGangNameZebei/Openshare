@@ -60,7 +60,7 @@ typedef enum : NSUInteger {
     OSPboardEncodingKeyedArchiver,
     OSPboardEncodingPropertyListSerialization,
 } OSPboardEncoding;
-@interface OpenShare : NSObject
+@interface OpenShare : NSObject <NSURLConnectionDelegate>
 
 /**
  *  设置平台的key

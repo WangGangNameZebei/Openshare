@@ -259,6 +259,27 @@ static OSMessage *message;
     UIGraphicsEndImageContext();
     return image;
 }
+
+- (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param {
+    NSURL *getUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", url, [self assembleParametersWithDictionary:param]]];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:getUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
+    NSLog(@"%@", res);
+}
+
+- (NSString *)assembleParametersWithDictionary:(NSDictionary *)dictionary {
+    NSMutableArray *parts = [NSMutableArray array];
+    for (NSString *key in [dictionary allKeys]) {
+        NSString *part = [NSString stringWithFormat:@"%@=%@", key, [self valueForKey:key]];
+        [parts addObject: part];
+    }
+    return [parts componentsJoinedByString: @"&"];
+}
+
 @end
 
 @implementation OSMessage
