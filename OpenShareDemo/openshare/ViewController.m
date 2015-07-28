@@ -204,6 +204,9 @@
     [auth addEventHandler:^(id sender) {
         [OpenShare QQAuth:@"get_user_info" Success:^(NSDictionary *message) {
             ULog(@"QQ登录成功\n%@",message);
+            [OpenShare getUserInfoWithCompletion:^(NSDictionary *data, NSError *error) {
+                NSLog(@"%@", data);
+            }];
         } Fail:^(NSDictionary *message, NSError *error) {
             ULog(@"QQ登录失败\n%@\n%@",error,message);
         }];

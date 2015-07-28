@@ -261,8 +261,8 @@ static OSMessage *message;
     
 }
 
-+ (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param withCompletion:(void (^)(id data, NSError *error))completion {
-    NSURL *getUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", url, [OpenShare assembleParametersWithDictionary:param]]];
++ (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param withCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
+    NSURL *getUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, [OpenShare assembleParametersWithDictionary:param]]];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:getUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error = nil;
@@ -280,7 +280,7 @@ static OSMessage *message;
 + (NSString *)assembleParametersWithDictionary:(NSDictionary *)dictionary {
     NSMutableArray *parts = [NSMutableArray array];
     for (NSString *key in [dictionary allKeys]) {
-        NSString *part = [NSString stringWithFormat:@"%@=%@", key, [self valueForKey:key]];
+        NSString *part = [NSString stringWithFormat:@"%@=%@", key, [dictionary valueForKey:key]];
         [parts addObject: part];
     }
     return [parts componentsJoinedByString: @"&"];
