@@ -260,18 +260,23 @@ static OSMessage *message;
     return image;
 }
 
-- (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param {
-    NSURL *getUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", url, [self assembleParametersWithDictionary:param]]];
++ (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param withCompletion:(void (^)(id data, NSError *error))completion {
+    NSURL *getUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", url, [OpenShare assembleParametersWithDictionary:param]]];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:getUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSError *error = nil;
+        NSData *received = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+        NSDictionary *responseObject = [NSJSONSerialization JSONObjectWithData:received options:NSJSONReadingAllowFragments error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (completion) {
+                completion(responseObject, error);
+            }
+        });
+    });
+    
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    NSHTTPURLResponse *res = (NSHTTPURLResponse *)response;
-    NSLog(@"%@", res);
-}
-
-- (NSString *)assembleParametersWithDictionary:(NSDictionary *)dictionary {
++ (NSString *)assembleParametersWithDictionary:(NSDictionary *)dictionary {
     NSMutableArray *parts = [NSMutableArray array];
     for (NSString *key in [dictionary allKeys]) {
         NSString *part = [NSString stringWithFormat:@"%@=%@", key, [self valueForKey:key]];
