@@ -14,12 +14,11 @@
  *
  *  @param appId AppID
  */
-+(void)connectWeixinWithAppId:(NSString *)appId;
-+(BOOL)isWeixinInstalled;
++ (void)connectWeixinWithAppId:(NSString *)appId;
++ (BOOL)isWeixinInstalled;
 
-+(void)shareToWeixinSession:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
-+(void)shareToWeixinTimeline:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
-+(void)shareToWeixinFavorite:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
-+(void)WeixinAuth:(NSString*)scope Success:(authSuccess)success Fail:(authFail)fail;
-+(void)WeixinPay:(NSString*)link Success:(paySuccess)success Fail:(payFail)fail;
++ (void)shareToWeixinSession:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
++ (void)shareToWeixinTimeline:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
++ (void)shareToWeixinFavorite:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
++ (void)WeixinAuth:(NSString*)scope Success:(authSuccess)success Fail:(authFail)fail;
 @end

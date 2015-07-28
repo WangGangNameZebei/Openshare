@@ -60,7 +60,7 @@ typedef enum : NSUInteger {
     OSPboardEncodingKeyedArchiver,
     OSPboardEncodingPropertyListSerialization,
 } OSPboardEncoding;
-@interface OpenShare : NSObject
+@interface OpenShare : NSObject <NSURLConnectionDelegate>
 
 /**
  *  设置平台的key
@@ -136,6 +136,8 @@ typedef enum : NSUInteger {
 
 +(paySuccess)paySuccessCallback;
 +(payFail)payFailCallback;
+
++ (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param withCompletion:(void (^)(id data, NSError *error))completion;
 
 @end
 

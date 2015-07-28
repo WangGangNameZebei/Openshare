@@ -9,7 +9,7 @@
 #import "OpenShare+QQ.h"
 
 @implementation OpenShare (QQ)
-static NSString* schema=@"QQ";
+static NSString *schema=@"QQ";
 enum
 {
     kQQAPICtrlFlagQZoneShareOnStart = 0x01,
@@ -19,34 +19,39 @@ enum
     kQQAPICtrlFlagQQShareDataline = 0x10,  //数据线
 };
 
-+(void)connectQQWithAppId:(NSString *)appId{
++ (void)connectQQWithAppId:(NSString *)appId {
     [self set:schema Keys:@{@"appid":appId,@"callback_name":[NSString stringWithFormat:@"QQ%02llx",[appId longLongValue]]}];
 }
-+(BOOL)isQQInstalled{
+
++ (BOOL)isQQInstalled {
     return [self canOpen:@"mqqapi://"];
 }
-+(void)shareToQQFriends:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail{
+
++ (void)shareToQQFriends:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail {
     if ([self beginShare:schema Message:msg Success:success Fail:fail]) {
         [self openURL:[self genShareUrl:msg to:0]];
     }
 }
-+(void)shareToQQZone:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail{
+
++ (void)shareToQQZone:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail {
     if ([self beginShare:schema Message:msg Success:success Fail:fail]) {
         [self openURL:[self genShareUrl:msg to:kQQAPICtrlFlagQZoneShareOnStart]];
     }
 }
-+(void)shareToQQFavorites:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail{
+
++ (void)shareToQQFavorites:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail {
     if ([self beginShare:schema Message:msg Success:success Fail:fail]) {
         [self openURL:[self genShareUrl:msg to:kQQAPICtrlFlagQQShareFavorites]];
     }
 }
-+(void)shareToQQDataline:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail{
+
++ (void)shareToQQDataline:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail {
     if ([self beginShare:schema Message:msg Success:success Fail:fail]) {
         [self openURL:[self genShareUrl:msg to:kQQAPICtrlFlagQQShareDataline]];
     }
 }
 
-+(void)QQAuth:(NSString*)scope Success:(authSuccess)success Fail:(authFail)fail{
++ (void)QQAuth:(NSString*)scope Success:(authSuccess)success Fail:(authFail)fail {
     if ([self beginAuth:schema Success:success Fail:fail]) {
         NSDictionary *authData=@{@"app_id" : [self keyFor:schema][@"appid"],
                                  @"app_name" : [self CFBundleDisplayName],
@@ -74,7 +79,7 @@ enum
  *
  *  @return 需要打开的url
  */
-+(NSString*)genShareUrl:(OSMessage*)msg to:(int)shareTo{
++ (NSString*)genShareUrl:(OSMessage*)msg to:(int)shareTo {
     NSMutableString *ret=[[NSMutableString alloc] initWithString:@"mqqapi://share/to_fri?thirdAppDisplayName="];
     [ret appendString:[self base64Encode:[self CFBundleDisplayName]]];
     [ret appendString:@"&version=1&cflag="];
@@ -91,7 +96,7 @@ enum
         //纯文本分享。
         [ret appendString:@"text&file_data="];
         [ret appendString:[self base64AndUrlEncode:msg.title]];
-    }else if([msg isEmpty:@[@"link"] AndNotEmpty:@[@"title",@"image",@"desc"]]){
+    } else if([msg isEmpty:@[@"link"] AndNotEmpty:@[@"title",@"image",@"desc"]]){
         //图片分享
         NSDictionary *data=@{@"file_data":msg.image,
                              @"previewimagedata":msg.thumbnail?:msg.image
@@ -101,7 +106,7 @@ enum
         [ret appendString:[self base64Encode:msg.title]];
         [ret appendString:@"&objectlocation=pasteboard&description="];
         [ret appendString:[self base64Encode:msg.desc]];
-    }else  if ([msg isEmpty:nil AndNotEmpty:@[@"title",@"desc",@"image",@"link",@"multimediaType"]]) {
+    } else  if ([msg isEmpty:nil AndNotEmpty:@[@"title",@"desc",@"image",@"link",@"multimediaType"]]) {
         //新闻／多媒体分享（图片加链接）发送新闻消息 预览图像数据，最大1M字节 URL地址,必填，最长512个字符 via QQApiInterfaceObject.h
         NSDictionary *data=@{@"previewimagedata":msg.image};
         [self setGeneralPasteboard:@"com.tencent.mqq.api.apiLargeData" Value:data encoding: OSPboardEncodingKeyedArchiver];
@@ -116,7 +121,7 @@ enum
     }
     return ret;
 }
-+(BOOL)QQ_handleOpenURL{
++ (BOOL)QQ_handleOpenURL {
     NSURL* url=[self returnedURL];
     if ([url.scheme hasPrefix:@"QQ"]) {
         //分享
@@ -129,20 +134,20 @@ enum
             if ([self shareFailCallback]) {
                 [self shareFailCallback]([self message],err);
             }
-        }else{
+        } else {
             if ([self shareSuccessCallback]) {
                 [self shareSuccessCallback]([self message]);
             }
         }
         return YES;
-    }else if([url.scheme hasPrefix:@"tencent"]){
+    } else if([url.scheme hasPrefix:@"tencent"]) {
         //登陆auth
         NSDictionary *ret=[self generalPasteboardData:[@"com.tencent.tencent" stringByAppendingString:[self keyFor:schema][@"appid"]] encoding:OSPboardEncodingKeyedArchiver];
-        if (ret[@"ret"]&&[ret[@"ret"] intValue]==0) {
+        if (ret[@"ret"]&&[ret[@"ret"] intValue] == 0) {
             if ( [self authSuccessCallback]) {
                 [self authSuccessCallback](ret);
             }
-        }else{
+        } else {
             NSError *err=[NSError errorWithDomain:@"auth_from_QQ" code:-1 userInfo:ret];
             if ([self authFailCallback]) {
                 [self authFailCallback](ret,err);
@@ -150,14 +155,9 @@ enum
         }
         return YES;
     }
-    else{
+    else {
         return NO;
     }
 }
-+(void)chatWithQQNumber:(NSString*)qqNumber{
-    [self openURL:[NSString stringWithFormat:@"mqqwpa://im/chat?uin=%@&thirdAppDisplayName=%@&callback_name=%@&src_type=app&version=1&chat_type=wpa&callback_type=scheme",qqNumber,[self base64Encode:[self CFBundleDisplayName]],[self keyFor:schema][@"callback_name"]]];
-}
-+(void)chatInQQGroup:(NSString*)groupNumber{
-    [self openURL:[NSString stringWithFormat:@"mqqwpa://im/chat?uin=%@&thirdAppDisplayName=%@&callback_name=%@&src_type=app&version=1&chat_type=group&callback_type=scheme",groupNumber,[self base64Encode:[self CFBundleDisplayName]],[self keyFor:schema][@"callback_name"]]];
-}
+
 @end

@@ -114,7 +114,7 @@ static NSString *schema=@"Weibo";
                 if ([self authSuccessCallback]) {
                     [self authSuccessCallback](transferObject);
                     //数据库储存
-                    [[NSUserDefaults standardUserDefaults] setObject:transferObject forKey:@"statusCode"];
+                    [[NSUserDefaults standardUserDefaults] setObject:transferObject forKey:@"WeiboAuthInfomation"];
                 }
             } else {
                 if ([self authFailCallback]) {
@@ -140,6 +140,13 @@ static NSString *schema=@"Weibo";
         return NO;
     }
 }
-
++ (void)getWeiboUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
+    NSDictionary *weiboDictionary =  [[NSUserDefaults standardUserDefaults] objectForKey:@"WeiboAuthInfomation"];
+    NSMutableDictionary *param = [[NSMutableDictionary alloc] init];
+     [param setObject:[weiboDictionary objectForKey:@"statusCode"] forKey:@"statusCode"];
+    [param setObject:[weiboDictionary objectForKey:@"userID"] forKey:@"userID"];
+    [OpenShare sendGetRequestWithUrl:@"https://api.weibo.com/2/users/show.json" andParam:param withCompletion:completion];
+    
+}
 
 @end

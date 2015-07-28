@@ -35,4 +35,7 @@
  *  @param fail        登录失败回调
  */
 + (void)WeiboAuth:(NSString*)scope redirectURI:(NSString*)redirectURI Success:(authSuccess)success Fail:(authFail)fail;
+
++ (void)getWeiboUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion;
+
 @end

@@ -129,11 +129,7 @@
             
             NSString *link=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
             NSLog(@"link:%@",link);
-            [OpenShare AliPay:link Success:^(NSDictionary *message) {
-                ULog(@"支付宝支付成功:\n%@",message);
-            } Fail:^(NSDictionary *message, NSError *error) {
-                ULog(@"支付宝支付失败:\n%@\n%@",message,error);
-            }];
+
         }
         
     } forControlEvents:UIControlEventTouchUpInside];
@@ -150,6 +146,11 @@
     [auth addEventHandler:^(id sender) {
         [OpenShare WeiboAuth:@"all" redirectURI:@"http://openshare.gfzj.us/" Success:^(NSDictionary *message) {
             ULog(@"微博登录成功:\n%@",message);
+            
+        [OpenShare getWeiboUserInfoWithCompletion:^(NSDictionary *data, NSError *error) {
+            NSLog(@"=== %@",data);
+        }];
+            
         } Fail:^(NSDictionary *message, NSError *error) {
             ULog(@"微博登录失败:\n%@\n%@",message,error);
         }];
@@ -209,16 +210,6 @@
     } forControlEvents:UIControlEventTouchUpInside];
     UIButton *chat=[self button:@"和我聊天" WithCenter:CGPointMake(frame.size.width/2, calcYFrom(auth)+40)];
     [loginView addSubview:chat];
-    [chat addEventHandler:^(id sender) {
-        [OpenShare chatWithQQNumber:@"393475141"];
-    } forControlEvents:UIControlEventTouchUpInside];
-    
-    UIButton *chatGroup=[self button:@"指定群聊天(必须是群成员)" WithCenter:CGPointMake(frame.size.width/2, calcYFrom(chat)+40)];
-    [loginView addSubview:chatGroup];
-    [chatGroup addEventHandler:^(id sender) {
-        [OpenShare chatInQQGroup:@"60623498"];
-    } forControlEvents:UIControlEventTouchUpInside];
-    
     UIView *shareView=[[UIView alloc] initWithFrame:loginView.frame];
     shareView.backgroundColor=[UIColor whiteColor];
     OSMessage *message=[[OSMessage alloc] init];
@@ -365,11 +356,6 @@
             //网络请求不要阻塞UI，仅限Demo
             NSData *data=[NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:apiUrl]] returningResponse:nil error:nil];
             NSString *link=[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
-            [OpenShare WeixinPay:link Success:^(NSDictionary *message) {
-                ULog(@"微信支付成功:\n%@",message);
-            } Fail:^(NSDictionary *message, NSError *error) {
-                ULog(@"微信支付失败:\n%@\n%@",message,error);
-            }];
         }
         
     }
@@ -494,18 +480,10 @@
     }
     switch ([(UISegmentedControl*)[panel viewWithTag:3004] selectedSegmentIndex]) {
         case 0:
-            [OpenShare shareToRenrenSession:msg Success:^(OSMessage *message) {
-                ULog(@"人人分享到聊天成功：\n%@",message);
-            } Fail:^(OSMessage *message, NSError *error) {
-                ULog(@"人人分享到聊天失败：\n%@\n%@",error,message);
-            }];
+            
             break;
         case 1:
-            [OpenShare shareToRenrenTimeline:msg Success:^(OSMessage *message) {
-                ULog(@"人人分享到新鲜事成功：\n%@",message);
-            } Fail:^(OSMessage *message, NSError *error) {
-                ULog(@"人人分享到新鲜事失败：\n%@\n%@",error,message);
-            }];
+            
             break;
             
         default:
