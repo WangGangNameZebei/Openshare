@@ -15,8 +15,8 @@
 *
 *  @param appKey 申请到的appKey
 */
-+(void)connectWeiboWithAppKey:(NSString *)appKey;
-+(BOOL)isWeiboInstalled;
++ (void)connectWeiboWithAppKey:(NSString *)appKey;
++ (BOOL)isWeiboInstalled;
 /**
  *  分享到微博，微博只支持三种类型：文本／图片／链接。根据OSMessage自动判定想分享的类型。
  *
@@ -24,7 +24,7 @@
  *  @param success 分享成功回调
  *  @param fail    分享失败回调
  */
-+(void)shareToWeibo:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
++ (void)shareToWeibo:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
 
 /**
  *  微博登录OAuth
@@ -34,5 +34,5 @@
  *  @param success     登录成功回调
  *  @param fail        登录失败回调
  */
-+(void)WeiboAuth:(NSString*)scope redirectURI:(NSString*)redirectURI Success:(authSuccess)success Fail:(authFail)fail;
++ (void)WeiboAuth:(NSString*)scope redirectURI:(NSString*)redirectURI Success:(authSuccess)success Fail:(authFail)fail;
 @end

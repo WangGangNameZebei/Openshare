@@ -10,13 +10,13 @@
 
 @implementation OpenShare (Weibo)
 static NSString *schema=@"Weibo";
-+(void)connectWeiboWithAppKey:(NSString *)appKey{
++ (void)connectWeiboWithAppKey:(NSString *)appKey {
     [self set:schema Keys:@{@"appKey":appKey}];
 }
-+(BOOL)isWeiboInstalled{
++ (BOOL)isWeiboInstalled {
     return [self canOpen:@"weibosdk://request"];
 }
-+(void)shareToWeibo:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail{
++ (void)shareToWeibo:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail {
     if (![self beginShare:schema Message:msg Success:success Fail:fail]) {
         return;
     }
@@ -27,7 +27,7 @@ static NSString *schema=@"Weibo";
                    @"__class" : @"WBMessageObject",
                    @"text" :msg.title
                    };
-    }else if ([msg isEmpty:@[@"link" ] AndNotEmpty:@[@"title",@"image"] ]) {
+    } else if ([msg isEmpty:@[@"link" ] AndNotEmpty:@[@"title",@"image"] ]) {
         //图片类型分享
         message=@{
                   @"__class" : @"WBMessageObject",
@@ -37,7 +37,7 @@ static NSString *schema=@"Weibo";
                   @"text" : msg.title
                   };
         
-    }else if ([msg isEmpty:nil AndNotEmpty:@[@"title",@"link" ,@"image"] ]) {
+    } else if ([msg isEmpty:nil AndNotEmpty:@[@"title",@"link" ,@"image"] ]) {
         //链接类型分享
         message=@{
                   @"__class" : @"WBMessageObject",
@@ -67,7 +67,7 @@ static NSString *schema=@"Weibo";
     [self openURL:[NSString stringWithFormat:@"weibosdk://request?id=%@&sdkversion=003013000",uuid]];
 }
 
-+(void)WeiboAuth:(NSString*)scope redirectURI:(NSString*)redirectURI Success:(authSuccess)success Fail:(authFail)fail{
++ (void)WeiboAuth:(NSString*)scope redirectURI:(NSString*)redirectURI Success:(authSuccess)success Fail:(authFail)fail {
     if (![self beginAuth:schema Success:success Fail:fail]) {
         return;
     }
@@ -96,11 +96,12 @@ static NSString *schema=@"Weibo";
     [self openURL:[NSString stringWithFormat:@"weibosdk://request?id=%@&sdkversion=003013000",uuid]];
 }
 
-+(BOOL)Weibo_handleOpenURL{
++ (BOOL)Weibo_handleOpenURL {
     NSURL* url=[self returnedURL];
     if ([url.scheme hasPrefix:@"wb"]) {
         NSArray *items=[UIPasteboard generalPasteboard].items;
         NSMutableDictionary *ret=[NSMutableDictionary dictionaryWithCapacity:items.count];
+       
         for (NSDictionary *item in items) {
             for (NSString *k in item) {
                 ret[k]=[k isEqualToString:@"sdkVersion"]?item[k]:[NSKeyedUnarchiver unarchiveObjectWithData:item[k]];
@@ -112,20 +113,22 @@ static NSString *schema=@"Weibo";
             if ([transferObject[@"statusCode"] intValue]==0) {
                 if ([self authSuccessCallback]) {
                     [self authSuccessCallback](transferObject);
+                    //数据库储存
+                    [[NSUserDefaults standardUserDefaults] setObject:transferObject forKey:@"statusCode"];
                 }
-            }else{
+            } else {
                 if ([self authFailCallback]) {
                     NSError *err=[NSError errorWithDomain:@"weibo_auth_response" code:[transferObject[@"statusCode"] intValue] userInfo:transferObject];
                     [self authFailCallback](transferObject,err);
                 }
             }
-        }else if ([transferObject[@"__class"] isEqualToString:@"WBSendMessageToWeiboResponse"]) {
+        } else if ([transferObject[@"__class"] isEqualToString:@"WBSendMessageToWeiboResponse"]) {
             //分享回调
             if ([transferObject[@"statusCode"] intValue]==0) {
                 if ([self shareSuccessCallback]) {
                     [self shareSuccessCallback]([self message]);
                 }
-            }else{
+            } else {
                 if ([self shareFailCallback]) {
                     NSError *err=[NSError errorWithDomain:@"weibo_share_response" code:[transferObject[@"statusCode"] intValue] userInfo:transferObject];
                     [self shareFailCallback]([self message],err);
@@ -133,7 +136,7 @@ static NSString *schema=@"Weibo";
             }
         }
         return YES;
-    } else{
+    } else {
         return NO;
     }
 }

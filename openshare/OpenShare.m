@@ -213,7 +213,7 @@ static OSMessage *message;
 }
 //对url进行base64解密
 +(NSString*)urlDecode:(NSString*)input{
-   return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 /**
  *  截屏功能。via：http://stackoverflow.com/a/8017292/3825920
