@@ -133,7 +133,8 @@ static OSMessage *message;
 }
 
 #pragma mark 公共实用方法
-+(NSMutableDictionary *)parseUrl:(NSURL*)url{
+//连接成url?a=1&b=2&c=3的形式
++ (NSMutableDictionary *)parseUrl:(NSURL*)url {
     NSMutableDictionary *queryStringDictionary = [[NSMutableDictionary alloc] init];
     NSArray *urlComponents = [[url query] componentsSeparatedByString:@"&"];
     
@@ -144,26 +145,34 @@ static OSMessage *message;
     }
     return queryStringDictionary;
 }
-+(NSString*)base64Encode:(NSString *)input{
+//转换成base64的字符
++ (NSString*)base64Encode:(NSString *)input {
     return  [[input dataUsingEncoding:NSUTF8StringEncoding] base64EncodedStringWithOptions:0];
 }
-+(NSString*)base64Decode:(NSString *)input{
+//把base64的字符解码成明文
++ (NSString*)base64Decode:(NSString *)input {
    return [[NSString alloc ] initWithData:[[NSData alloc] initWithBase64EncodedString:input options:0] encoding:NSUTF8StringEncoding];
 }
-+(NSString*)CFBundleDisplayName{
+
+//获取项目的displayName
++ (NSString*)CFBundleDisplayName {
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
 }
+//获取项目的bundleid
 +(NSString*)CFBundleIdentifier{
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
 }
+//设置粘贴版，复制对象或者数据
 +(void)setGeneralPasteboard:(NSString*)key Value:(NSDictionary*)value encoding:(OSPboardEncoding)encoding{
     if (value&&key) {
         NSData *data=nil;
         NSError *err;
         switch (encoding) {
+            //针对对象的序列化
             case OSPboardEncodingKeyedArchiver:
                 data=[NSKeyedArchiver archivedDataWithRootObject:value];
                 break;
+            //针对字典类型的序列化
             case OSPboardEncodingPropertyListSerialization:
                 data=[NSPropertyListSerialization dataWithPropertyList:value format:NSPropertyListBinaryFormat_v1_0 options:0 error:&err];
             default:
@@ -177,6 +186,7 @@ static OSMessage *message;
         }
     }
 }
+//设置粘贴版，得到对象或者数据
 +(NSDictionary*)generalPasteboardData:(NSString*)key encoding:(OSPboardEncoding)encoding{
     NSData *data=[[UIPasteboard generalPasteboard] dataForPasteboardType:key];
     NSDictionary *dic=nil;
@@ -197,9 +207,11 @@ static OSMessage *message;
     }
     return dic;
 }
+//对url进行base64加密
 +(NSString*)base64AndUrlEncode:(NSString *)string{
     return  [[self base64Encode:string] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 }
+//对url进行base64解密
 +(NSString*)urlDecode:(NSString*)input{
    return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
@@ -251,6 +263,8 @@ static OSMessage *message;
 @end
 
 @implementation OSMessage
+
+//定义有哪些属性“emptyValueForKeys”是空，有哪些属性“notEmptyValueForKeys”不是空
 -(BOOL)isEmpty:(NSArray*)emptyValueForKeys AndNotEmpty:(NSArray*)notEmptyValueForKeys{
     @try {
         if (emptyValueForKeys) {
