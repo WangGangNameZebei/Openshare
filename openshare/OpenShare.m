@@ -14,23 +14,23 @@
  */
 static NSMutableDictionary *keys;
                                   
-+(void)set:(NSString*)platform Keys:(NSDictionary *)key{
++ (void)set:(NSString*)platform Keys:(NSDictionary *)key {
     if (!keys) {
         keys=[[NSMutableDictionary alloc] init];
     }
     keys[platform]=key;
 }
-+(NSDictionary *)keyFor:(NSString*)platform{
++ (NSDictionary *)keyFor:(NSString*)platform {
     return [keys valueForKey:platform]?keys[platform]:nil;
 }
 
-+(void)openURL:(NSString*)url{
++ (void)openURL:(NSString*)url {
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
 }
-+(BOOL)canOpen:(NSString*)url{
++ (BOOL)canOpen:(NSString*)url {
     return [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:url]];
 }
-+(BOOL)handleOpenURL:(NSURL*)openUrl{
++ (BOOL)handleOpenURL:(NSURL*)openUrl {
     returnedURL=openUrl;
     for (NSString *key in keys) {
         SEL sel=NSSelectorFromString([key stringByAppendingString:@"_handleOpenURL"]);
@@ -65,66 +65,66 @@ static paySuccess paySuccessCallback;
 static payFail payFailCallback;
 
 static OSMessage *message;
-+(shareSuccess)shareSuccessCallback{
++ (shareSuccess)shareSuccessCallback {
     return shareSuccessCallback;
 }
-+(shareFail)shareFailCallback{
++ (shareFail)shareFailCallback {
     return shareFailCallback;
 }
-+(void)setShareSuccessCallback:(shareSuccess)suc{
-    shareSuccessCallback=suc;
++ (void)setShareSuccessCallback:(shareSuccess)suc {
+    shareSuccessCallback = suc;
 }
-+(void)setShareFailCallback:(shareFail)fail{
-    shareFailCallback=fail;
++ (void)setShareFailCallback:(shareFail)fail {
+    shareFailCallback = fail;
 }
-+(void)setPaySuccessCallback:(paySuccess)suc{
-    paySuccessCallback=suc;
++ (void)setPaySuccessCallback:(paySuccess)suc {
+    paySuccessCallback = suc;
 }
-+(void)setPayFailCallback:(payFail)fail{
-    payFailCallback=fail;
++ (void)setPayFailCallback:(payFail)fail {
+    payFailCallback = fail;
 }
-+(paySuccess)paySuccessCallback{
++ (paySuccess)paySuccessCallback {
     return paySuccessCallback;
 }
-+(payFail)payFailCallback{
++ (payFail)payFailCallback {
     return payFailCallback;
 }
-+(NSURL*)returnedURL{
++ (NSURL*)returnedURL {
     return returnedURL;
 }
-+(NSDictionary*)returnedData{
++ (NSDictionary*)returnedData {
     return returnedData;
 }
-+(void)setReturnedData:(NSDictionary*)retData{
-    returnedData=retData;
++ (void)setReturnedData:(NSDictionary*)retData {
+    returnedData = retData;
 }
-+(void)setMessage:(OSMessage*)msg{
-    message=msg;
++ (void)setMessage:(OSMessage*)msg {
+    message = msg;
 }
-+(OSMessage*)message{
-    return message?:[[OSMessage alloc] init];
++ (OSMessage*)message {
+    return message? : [[OSMessage alloc] init];
 }
-+(authSuccess)authSuccessCallback{
++ (authSuccess)authSuccessCallback {
     return authSuccessCallback;
 }
-+(authFail)authFailCallback{
++ (authFail)authFailCallback {
     return authFailCallback;
 }
-+(BOOL)beginShare:(NSString*)platform Message:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail{
++ (BOOL)beginShare:(NSString*)platform Message:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail {
     if ([self keyFor:platform]) {
-        message=msg;
-        shareSuccessCallback=success;
-        shareFailCallback=fail;
+        message = msg;
+        shareSuccessCallback = success;
+        shareFailCallback = fail;
         return YES;
     }else{
         NSLog(@"place connect%@ before you can share to it!!!",platform);
         return NO;
     }
 }
-+(BOOL)beginAuth:(NSString*)platform Success:(authSuccess)success Fail:(authFail)fail{
++ (BOOL)beginAuth:(NSString*)platform Success:(authSuccess)success Fail:(authFail)fail {
     if ([self keyFor:platform]) {
-        authSuccessCallback=success;
-        authFailCallback=fail;
+        authSuccessCallback = success;
+        authFailCallback = fail;
         return YES;
     }else{
         NSLog(@"place connect%@ before you can share to it!!!",platform);
@@ -159,11 +159,11 @@ static OSMessage *message;
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
 }
 //获取项目的bundleid
-+(NSString*)CFBundleIdentifier{
++ (NSString*)CFBundleIdentifier {
     return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
 }
 //设置粘贴版，复制对象或者数据
-+(void)setGeneralPasteboard:(NSString*)key Value:(NSDictionary*)value encoding:(OSPboardEncoding)encoding{
++ (void)setGeneralPasteboard:(NSString*)key Value:(NSDictionary*)value encoding:(OSPboardEncoding)encoding {
     if (value&&key) {
         NSData *data=nil;
         NSError *err;
@@ -187,7 +187,7 @@ static OSMessage *message;
     }
 }
 //设置粘贴版，得到对象或者数据
-+(NSDictionary*)generalPasteboardData:(NSString*)key encoding:(OSPboardEncoding)encoding{
++ (NSDictionary*)generalPasteboardData:(NSString*)key encoding:(OSPboardEncoding)encoding {
     NSData *data=[[UIPasteboard generalPasteboard] dataForPasteboardType:key];
     NSDictionary *dic=nil;
     if (data) {
@@ -208,11 +208,11 @@ static OSMessage *message;
     return dic;
 }
 //对url进行base64加密
-+(NSString*)base64AndUrlEncode:(NSString *)string{
++ (NSString*)base64AndUrlEncode:(NSString *)string {
     return  [[self base64Encode:string] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
 }
 //对url进行base64解密
-+(NSString*)urlDecode:(NSString*)input{
++ (NSString*)urlDecode:(NSString*)input {
    return [[input stringByReplacingOccurrencesOfString:@"+" withString:@" "]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 }
 /**
@@ -220,8 +220,7 @@ static OSMessage *message;
  *
  *  @return 对当前窗口截屏。（支付宝可能需要）
  */
-+ (UIImage *)screenshot
-{
++ (UIImage *)screenshot {
     CGSize imageSize = CGSizeZero;
     
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
@@ -265,7 +264,7 @@ static OSMessage *message;
 @implementation OSMessage
 
 //定义有哪些属性“emptyValueForKeys”是空，有哪些属性“notEmptyValueForKeys”不是空
--(BOOL)isEmpty:(NSArray*)emptyValueForKeys AndNotEmpty:(NSArray*)notEmptyValueForKeys{
+- (BOOL)isEmpty:(NSArray*)emptyValueForKeys AndNotEmpty:(NSArray*)notEmptyValueForKeys {
     @try {
         if (emptyValueForKeys) {
             for (NSString *key in emptyValueForKeys) {
