@@ -260,8 +260,8 @@ static OSMessage *message;
     return image;
 }
 
-+ (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param withCompletion:(void (^)(id data, NSError *error))completion {
-    NSURL *getUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@", url, [OpenShare assembleParametersWithDictionary:param]]];
++ (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param withCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
+    NSURL *getUrl = [NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", url, [OpenShare assembleParametersWithDictionary:param]]];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:getUrl cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSError *error = nil;

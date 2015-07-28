@@ -121,6 +121,16 @@ enum
     }
     return ret;
 }
+
++ (void)getUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
+    NSDictionary *authInfomation = [[NSUserDefaults standardUserDefaults] objectForKey:@"QQAuthInfomation"];
+    NSMutableDictionary *param = [[NSMutableDictionary alloc] init];
+    [param setObject:[authInfomation objectForKey:@"access_token"] forKey:@"access_token"];
+    [param setObject:[authInfomation objectForKey:@"openid"] forKey:@"openid"];
+    [param setObject:[self keyFor:schema] forKey:@"oauth_consumer_key"];
+    [OpenShare sendGetRequestWithUrl:@"https://graph.qq.com/user/get_user_info" andParam:param withCompletion:completion];
+}
+
 + (BOOL)QQ_handleOpenURL {
     NSURL* url=[self returnedURL];
     if ([url.scheme hasPrefix:@"QQ"]) {
@@ -144,7 +154,9 @@ enum
         //登陆auth
         NSDictionary *ret=[self generalPasteboardData:[@"com.tencent.tencent" stringByAppendingString:[self keyFor:schema][@"appid"]] encoding:OSPboardEncodingKeyedArchiver];
         if (ret[@"ret"]&&[ret[@"ret"] intValue] == 0) {
-            if ( [self authSuccessCallback]) {
+            if ([self authSuccessCallback]) {
+                NSLog(@"%@", ret);
+                [[NSUserDefaults standardUserDefaults] setObject:ret forKey:@"QQAuthInfomation"];
                 [self authSuccessCallback](ret);
             }
         } else {
