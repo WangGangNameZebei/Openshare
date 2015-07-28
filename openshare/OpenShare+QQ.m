@@ -127,7 +127,7 @@ enum
     NSMutableDictionary *param = [[NSMutableDictionary alloc] init];
     [param setObject:[authInfomation objectForKey:@"access_token"] forKey:@"access_token"];
     [param setObject:[authInfomation objectForKey:@"openid"] forKey:@"openid"];
-    [param setObject:[self keyFor:schema] forKey:@"oauth_consumer_key"];
+    [param setObject:[[self keyFor:schema] objectForKey:@"appid"] forKey:@"oauth_consumer_key"];
     [OpenShare sendGetRequestWithUrl:@"https://graph.qq.com/user/get_user_info" andParam:param withCompletion:completion];
 }
 

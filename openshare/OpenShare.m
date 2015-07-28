@@ -279,7 +279,7 @@ static OSMessage *message;
 + (NSString *)assembleParametersWithDictionary:(NSDictionary *)dictionary {
     NSMutableArray *parts = [NSMutableArray array];
     for (NSString *key in [dictionary allKeys]) {
-        NSString *part = [NSString stringWithFormat:@"%@=%@", key, [self valueForKey:key]];
+        NSString *part = [NSString stringWithFormat:@"%@=%@", key, [dictionary valueForKey:key]];
         [parts addObject: part];
     }
     return [parts componentsJoinedByString: @"&"];
