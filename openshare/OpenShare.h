@@ -137,6 +137,8 @@ typedef enum : NSUInteger {
 +(paySuccess)paySuccessCallback;
 +(payFail)payFailCallback;
 
+- (void)sendGetRequestWithUrl:(NSString *)url andParam:(NSDictionary *)param;
+
 @end
 
 
