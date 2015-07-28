@@ -26,7 +26,7 @@
 + (void)shareToQQFavorites:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
 + (void)shareToQQDataline:(OSMessage*)msg Success:(shareSuccess)success Fail:(shareFail)fail;
 + (void)QQAuth:(NSString*)scope Success:(authSuccess)success Fail:(authFail)fail;
-+ (void)getUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion;
++ (void)getQQUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion;
 /**
  *  是否能处理这个openUrl，如果能就返回YES，并且按照callback处理，否则返回NO，交给下一个处理。
  *

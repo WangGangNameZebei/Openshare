@@ -122,8 +122,35 @@ enum
     return ret;
 }
 
-+ (void)getUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
-    NSDictionary *authInfomation = [[NSUserDefaults standardUserDefaults] objectForKey:@"QQAuthInfomation"];
++ (void)getQQUserInfoWithCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"QQAuthInfomation"]) {
+        NSDictionary *authInfomation = [[NSUserDefaults standardUserDefaults] objectForKey:@"QQAuthInfomation"];
+        CGFloat expires = [[authInfomation objectForKey:@"expires_in"] floatValue];
+        if ([[NSDate date] timeIntervalSince1970] <= [[authInfomation objectForKey:@"access_token_start_date"] timeIntervalSince1970] + expires) {
+            [OpenShare getQQUserInfoIfIsAuthedWithAuthInfomation:authInfomation withCompletion:completion];
+        } else {
+            [OpenShare QQAuth:@"get_user_info" Success:^(NSDictionary *message) {
+                NSDictionary *newAuthInfomation = [[NSUserDefaults standardUserDefaults] objectForKey:@"QQAuthInfomation"];
+                [OpenShare getQQUserInfoIfIsAuthedWithAuthInfomation:newAuthInfomation withCompletion:completion];
+            } Fail:^(NSDictionary *message, NSError *error) {
+                if (completion) {
+                    completion(message, error);
+                }
+            }];
+        }
+    } else {
+        [OpenShare QQAuth:@"get_user_info" Success:^(NSDictionary *message) {
+            NSDictionary *authInfomation = [[NSUserDefaults standardUserDefaults] objectForKey:@"QQAuthInfomation"];
+            [OpenShare getQQUserInfoIfIsAuthedWithAuthInfomation:authInfomation withCompletion:completion];
+        } Fail:^(NSDictionary *message, NSError *error) {
+            if (completion) {
+                completion(message, error);
+            }
+        }];
+    }
+}
+
++ (void)getQQUserInfoIfIsAuthedWithAuthInfomation:(NSDictionary *)authInfomation withCompletion:(void (^)(NSDictionary *data, NSError *error))completion {
     NSMutableDictionary *param = [[NSMutableDictionary alloc] init];
     [param setObject:[authInfomation objectForKey:@"access_token"] forKey:@"access_token"];
     [param setObject:[authInfomation objectForKey:@"openid"] forKey:@"openid"];
@@ -156,7 +183,9 @@ enum
         if (ret[@"ret"]&&[ret[@"ret"] intValue] == 0) {
             if ([self authSuccessCallback]) {
                 NSLog(@"%@", ret);
-                [[NSUserDefaults standardUserDefaults] setObject:ret forKey:@"QQAuthInfomation"];
+                NSMutableDictionary *authInfomation = [[NSMutableDictionary alloc] initWithDictionary:ret];
+                [authInfomation setObject:[NSDate date] forKey:@"access_token_start_date"];
+                [[NSUserDefaults standardUserDefaults] setObject:authInfomation forKey:@"QQAuthInfomation"];
                 [self authSuccessCallback](ret);
             }
         } else {
