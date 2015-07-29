@@ -178,6 +178,20 @@ enum
         }
         return YES;
     } else if([url.scheme hasPrefix:@"tencent"]) {
+        NSDictionary *dic=[self parseUrl:url];
+        if (dic[@"error_description"]) {
+            [dic setValue:[self base64Decode:dic[@"error_description"]] forKey:@"error_description"];
+        }
+        if ([dic[@"error"] intValue]!=0) {
+            NSError *err=[NSError errorWithDomain:@"response_from_qq" code:[dic[@"error"] intValue] userInfo:dic];
+            if ([self shareFailCallback]) {
+                [self shareFailCallback]([self message],err);
+            }
+        } else {
+            if ([self shareSuccessCallback]) {
+                [self shareSuccessCallback]([self message]);
+            }
+        }
         //登陆auth
         NSDictionary *ret=[self generalPasteboardData:[@"com.tencent.tencent" stringByAppendingString:[self keyFor:schema][@"appid"]] encoding:OSPboardEncodingKeyedArchiver];
         if (ret[@"ret"]&&[ret[@"ret"] intValue] == 0) {
