@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E63D9E81B6B643000D8BEF3 /* NSMutableDictionary+OpenShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E63D9E71B6B643000D8BEF3 /* NSMutableDictionary+OpenShare.m */; };
 		B66BF3B31B0C137E0082F8D6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B66BF3B21B0C137E0082F8D6 /* main.m */; };
 		B66BF3B61B0C137E0082F8D6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B66BF3B51B0C137E0082F8D6 /* AppDelegate.m */; };
 		B66BF3B91B0C137E0082F8D6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B66BF3B81B0C137E0082F8D6 /* ViewController.m */; };
@@ -36,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2E63D9E61B6B643000D8BEF3 /* NSMutableDictionary+OpenShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableDictionary+OpenShare.h"; path = "../openshare/NSMutableDictionary+OpenShare.h"; sourceTree = "<group>"; };
+		2E63D9E71B6B643000D8BEF3 /* NSMutableDictionary+OpenShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableDictionary+OpenShare.m"; path = "../openshare/NSMutableDictionary+OpenShare.m"; sourceTree = "<group>"; };
 		B66BF3AD1B0C137E0082F8D6 /* openshare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = openshare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66BF3B11B0C137E0082F8D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B66BF3B21B0C137E0082F8D6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -170,6 +173,8 @@
 				B66BF3EA1B0C16290082F8D6 /* OpenShare.h */,
 				B66BF3EB1B0C16290082F8D6 /* OpenShare.m */,
 				B66BF3EC1B0C16290082F8D6 /* OpenShareHeader.h */,
+				2E63D9E61B6B643000D8BEF3 /* NSMutableDictionary+OpenShare.h */,
+				2E63D9E71B6B643000D8BEF3 /* NSMutableDictionary+OpenShare.m */,
 			);
 			name = OpenShare;
 			path = ../../OpenShare;
@@ -281,6 +286,7 @@
 			files = (
 				B66BF3B91B0C137E0082F8D6 /* ViewController.m in Sources */,
 				B66BF3B61B0C137E0082F8D6 /* AppDelegate.m in Sources */,
+				2E63D9E81B6B643000D8BEF3 /* NSMutableDictionary+OpenShare.m in Sources */,
 				B66BF3F41B0C1AEB0082F8D6 /* UIControl+Blocks.m in Sources */,
 				B66BF3F11B0C16290082F8D6 /* OpenShare.m in Sources */,
 				B66BF3B31B0C137E0082F8D6 /* main.m in Sources */,
