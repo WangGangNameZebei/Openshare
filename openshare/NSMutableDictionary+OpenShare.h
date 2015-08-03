@@ -11,12 +11,12 @@
 
 @interface NSMutableDictionary (OpenShare)
 
-- (void)appendDataToWeiXinTextShareWithMassage:(OSMessage *)message;
-- (void)appendDataToWeiXinImageShareWithMassage:(OSMessage *)message;
-- (void)appendDataToWeiXinLinkShareWithMassage:(OSMessage *)message;
-- (void)appendDataToWeiXinMusicShareWithMassage:(OSMessage *)message;
-- (void)appendDataToWeiXinVideoShareWithMassage:(OSMessage *)message;
-- (void)appendDataToWeiXinAppShareWithMassage:(OSMessage *)message;
-- (void)appendDataToWeiXinFileShareWithMassage:(OSMessage *)message;
+- (void)appendDataToWeiXinTextShareWithMessage:(OSMessage *)message;
+- (void)appendDataToWeiXinImageShareWithMessage:(OSMessage *)message;
+- (void)appendDataToWeiXinLinkShareWithMessage:(OSMessage *)message;
+- (void)appendDataToWeiXinMusicShareWithMessage:(OSMessage *)message;
+- (void)appendDataToWeiXinVideoShareWithMessage:(OSMessage *)message;
+- (void)appendDataToWeiXinAppShareWithMessage:(OSMessage *)message;
+- (void)appendDataToWeiXinFileShareWithMessage:(OSMessage *)message;
 
 @end

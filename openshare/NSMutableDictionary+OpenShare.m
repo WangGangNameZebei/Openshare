@@ -12,18 +12,18 @@
 
 #pragma mark - WeiXin
 
-- (void)appendDataToWeiXinTextShareWithMassage:(OSMessage *)message {
+- (void)appendDataToWeiXinTextShareWithMessage:(OSMessage *)message {
     self[@"command"] = @"1020";
     self[@"title"] = message.title;
 }
 
-- (void)appendDataToWeiXinImageShareWithMassage:(OSMessage *)message {
+- (void)appendDataToWeiXinImageShareWithMessage:(OSMessage *)message {
     self[@"fileData"] = message.image;
     self[@"thumbData"] = message.thumbnail ? : message.image;
     self[@"objectType"] = @"2";
 }
 
-- (void)appendDataToWeiXinLinkShareWithMassage:(OSMessage *)message {
+- (void)appendDataToWeiXinLinkShareWithMessage:(OSMessage *)message {
     self[@"description"] = message.desc ? : message.title;
     self[@"mediaUrl"] = message.link;
     self[@"objectType"] = @"5";
@@ -31,7 +31,7 @@
     self[@"title"] = message.title;
 }
 
-- (void)appendDataToWeiXinMusicShareWithMassage:(OSMessage *)message {
+- (void)appendDataToWeiXinMusicShareWithMessage:(OSMessage *)message {
     self[@"description"] = message.desc ? : message.title;
     self[@"mediaUrl"] = message.link;
     self[@"mediaDataUrl"] = message.mediaDataUrl;
@@ -40,7 +40,7 @@
     self[@"title"] = message.title;
 }
 
-- (void)appendDataToWeiXinVideoShareWithMassage:(OSMessage *)message {
+- (void)appendDataToWeiXinVideoShareWithMessage:(OSMessage *)message {
     self[@"description"] = message.desc ? : message.title;
     self[@"mediaUrl"] = message.link;
     self[@"objectType"] = @"4";
@@ -48,7 +48,7 @@
     self[@"title"] = message.title;
 }
 
-- (void)appendDataToWeiXinAppShareWithMassage:(OSMessage *)message {
+- (void)appendDataToWeiXinAppShareWithMessage:(OSMessage *)message {
     self[@"description"] = message.desc ? : message.title;
     if (message.extInfo) self[@"extInfo"] = message.extInfo;
     self[@"fileData"] = message.image;
@@ -58,7 +58,7 @@
     self[@"title"] = message.title;
 }
 
-- (void)appendDataToWeiXinFileShareWithMassage:(OSMessage *)message {
+- (void)appendDataToWeiXinFileShareWithMessage:(OSMessage *)message {
     self[@"description"] = message.desc ? : message.title;
     self[@"fileData"] = message.image;
     self[@"objectType"] = @"6";

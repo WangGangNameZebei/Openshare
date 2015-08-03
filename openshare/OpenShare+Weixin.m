@@ -53,20 +53,20 @@ static NSString *schema=@"Weixin";
     if (!msg.multimediaType) {
         //不指定类型
         if ([msg isEmpty:@[@"image",@"link"] AndNotEmpty:@[@"title"]]) {
-            [dic appendDataToWeiXinTextShareWithMassage:msg];
+            [dic appendDataToWeiXinTextShareWithMessage:msg];
         } else if([msg isEmpty:@[@"link"] AndNotEmpty:@[@"image"]]) {
-            [dic appendDataToWeiXinImageShareWithMassage:msg];
+            [dic appendDataToWeiXinImageShareWithMessage:msg];
         } else if([msg isEmpty:nil AndNotEmpty:@[@"link",@"title",@"image"]]) {
-            [dic appendDataToWeiXinLinkShareWithMassage:msg];
+            [dic appendDataToWeiXinLinkShareWithMessage:msg];
         }
     } else if(msg.multimediaType==OSMultimediaTypeAudio) {
-        [dic appendDataToWeiXinMusicShareWithMassage:msg];
+        [dic appendDataToWeiXinMusicShareWithMessage:msg];
     } else if(msg.multimediaType==OSMultimediaTypeVideo) {
-        [dic appendDataToWeiXinVideoShareWithMassage:msg];
+        [dic appendDataToWeiXinVideoShareWithMessage:msg];
     } else if(msg.multimediaType==OSMultimediaTypeApp) {
-        [dic appendDataToWeiXinAppShareWithMassage:msg];
+        [dic appendDataToWeiXinAppShareWithMessage:msg];
     } else if(msg.multimediaType==OSMultimediaTypeFile) {
-        [dic appendDataToWeiXinFileShareWithMassage:msg];
+        [dic appendDataToWeiXinFileShareWithMessage:msg];
     }
     NSData *output=[NSPropertyListSerialization dataWithPropertyList:@{[self keyFor:schema][@"appid"]:dic} format:NSPropertyListBinaryFormat_v1_0 options:0 error:nil];
     [[UIPasteboard generalPasteboard] setData:output forPasteboardType:@"content"];
